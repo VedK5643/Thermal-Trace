@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #080C14;
+  color: #E8EDF5;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Operational dark scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E2D45;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2D7DD2;
+}
+
+/* Input / select / textarea reset — but NOT buttons */
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+  outline: none;
+  border: none;
+  background: none;
+}
+
+/* Buttons: reset cursor + font only — preserve background */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Hide MapLibre attribution overlay text */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib {
+  display: none !important;
+}
+
+/* Overlay panel base: solid dark, no blur for performance */
+.tw-panel {
+  background-color: #111827;
+  border: 1px solid #1E2D45;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  color: #E8EDF5;
+}
+
+/* Pop-in-out pulsing animation for critical risk badges */
+@keyframes pop-in-out {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 4px rgba(255, 107, 0, 0.4);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 14px rgba(255, 107, 0, 0.9);
+    opacity: 1;
+  }
+}
+
+.animate-pop-in-out {
+  animation: pop-in-out 1.2s ease-in-out infinite;
+  display: inline-block;
+}
