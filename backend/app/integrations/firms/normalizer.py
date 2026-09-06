@@ -238,9 +238,10 @@ def parse_firms_csv(csv_text: str, source: str) -> List[Dict[str, Any]]:
         return records
 
     first_line = csv_text.strip().split("\n")[0]
-    if first_line.startswith("{") or "error" in first_line.lower():
-        logger.warning("FIRMS returned a non-CSV response: %s", first_line[:200])
-        return records
+    if "latitude" not in first_line.lower() or "longitude" not in first_line.lower():
+        error_msg = f"FIRMS returned an invalid or non-CSV response: {first_line[:200]}"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
 
     reader = csv.DictReader(io.StringIO(csv_text))
     normalizer = None
