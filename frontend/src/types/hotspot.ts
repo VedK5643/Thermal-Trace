@@ -39,8 +39,8 @@ export const HOTSPOT_COLORS: Record<HotspotType, string> = {
 };
 
 export const HOTSPOT_LABELS: Record<HotspotType, string> = {
-  industrial_thermal_source: 'Industrial Thermal Source',
-  mining_thermal_source: 'Mining Thermal Source',
-  natural_fire: 'Natural Fire',
-  unknown: 'Unknown / Unclassified',
+  industrial_thermal_source: 'Industrial Fire',
+  mining_thermal_source: 'Mining',
+  natural_fire: 'Agricultural Fire',
+  unknown: 'Unclassified',
 };

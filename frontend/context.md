@@ -1,7 +1,7 @@
 # ThermalEye — Project Context
 
 ## 1. Project Overview
-ThermalEye is a specialized geospatial thermal intelligence platform engineered to monitor, visualize, and classify thermal anomalies (industrial fires, gas flares, agricultural burns, wildfires, and unknown heat sources) across critical regional assets and industrial corridors.
+ThermalTrace is a specialized geospatial thermal intelligence platform engineered to monitor, visualize, and classify thermal anomalies (industrial fires, gas flares, agricultural burns, wildfires, and unknown heat sources) across critical regional assets and industrial corridors.
 
 The platform combines high-resolution geographic basemaps with thermal anomaly observations, facility proximity metrics, historical tracking, and interactive operational dashboards.
 

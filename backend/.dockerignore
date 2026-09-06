@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Python Virtual Environments & Caches
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets & Environment Files
+.env
+.env.*
+*.pem
+*.key
+
+# Scratch Datasets & Benchmark Logs (Excludes 1M training CSVs)
+scratch/
+*.csv
+*.log
+logs/
+.system_generated/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
