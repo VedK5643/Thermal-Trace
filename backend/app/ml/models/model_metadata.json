@@ -1,0 +1,27 @@
+{
+  "model_type": "XGBoost (multi:softmax)",
+  "feature_columns": [
+    "obs_count",
+    "log_mean_frp",
+    "log_std_frp",
+    "frp_cv",
+    "months_active",
+    "nearest_osm_distance_km",
+    "active_duration_days",
+    "first_seen_month"
+  ],
+  "label_classes": [
+    "industrial_thermal_source",
+    "mining_thermal_source",
+    "natural_fire",
+    "unknown"
+  ],
+  "test_set_metrics": {
+    "accuracy": 0.959343112244898,
+    "balanced_accuracy": 0.8920344549651242,
+    "macro_roc_auc": 0.9931517286541731,
+    "industrial_vs_non_industrial_f1": 1.0
+  },
+  "training_rows": 29268,
+  "notes": "Weak-supervised labels validated against OSM industrial infrastructure (90% corroboration). Leakage-safe: one row per physical source group, grouped split verified with zero overlap."
+}

@@ -1,0 +1,14 @@
+{
+  "total_groups_in_full_dataset": 4714657,
+  "total_training_groups": 41812,
+  "class_distribution": {
+    "natural_fire": 24000,
+    "unknown": 10000,
+    "industrial_thermal_source": 4936,
+    "mining_thermal_source": 2876
+  },
+  "osm_corroboration_rate": 0.8980342568111277,
+  "labeling_method": "weak_supervision: FIRMS persistence + OSM industrial proximity",
+  "osm_features_used": 80687,
+  "notes": "natural_fire stratified by first-detection month to preserve seasonal distribution; industrial/mining classes use full available population due to small size"
+}

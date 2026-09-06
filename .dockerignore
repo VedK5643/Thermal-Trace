@@ -1,0 +1,26 @@
+# Git
+.git
+.gitignore
+README.md
+
+# Frontend Node Modules & Builds
+frontend/node_modules/
+frontend/dist/
+
+# Backend Virtual Environments & Caches
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/.pytest_cache/
+*.pyc
+
+# Scratch & Benchmark Files (Excludes 1M training CSVs)
+scratch/
+*.csv
+*.log
+logs/
+.system_generated/
+
+# Secrets & Local Envs
+.env
+.env.*

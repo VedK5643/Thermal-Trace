@@ -1,0 +1,59 @@
+version: '3.8'
+
+networks:
+  thermalwatch-network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: thermalwatch-redis
+    networks:
+      - thermalwatch-network
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: thermalwatch-backend
+    networks:
+      - thermalwatch-network
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL_DIRECT=${DATABASE_URL_DIRECT}
+      - FIRMS_MAP_KEY=${FIRMS_MAP_KEY}
+      - FIRMS_SOURCES=${FIRMS_SOURCES:-VIIRS_SNPP_NRT,VIIRS_NOAA20_NRT,VIIRS_NOAA21_NRT}
+      - FIRMS_INGESTION_DAYS=${FIRMS_INGESTION_DAYS:-5}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:5173}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=http://localhost:8000
+    container_name: thermalwatch-frontend
+    networks:
+      - thermalwatch-network
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
