@@ -85,7 +85,7 @@ function formatDetected(ts: string): string {
   return `${date}, ${time}`;
 }
 
-export default function RightPanel(): React.JSX.Element | null {
+export default function RightPanel({ onClosePanel }: { onClosePanel?: () => void }): React.JSX.Element | null {
   const selectedHotspotId = useMapStore((s) => s.selectedHotspotId);
   const selectedFacilityId = useMapStore((s) => s.selectedFacilityId);
   const selectHotspot = useMapStore((s) => s.selectHotspot);
@@ -191,9 +191,19 @@ export default function RightPanel(): React.JSX.Element | null {
           <span className="text-[11px] font-bold tracking-widest text-[#E8EDF5] uppercase">
             INTELLIGENCE PANEL
           </span>
-          <span className="text-[9px] font-mono text-[#6B7280] bg-[#162033] px-1.5 py-0.5 rounded">
-            SYNCING
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[9px] font-mono text-[#6B7280] bg-[#162033] px-1.5 py-0.5 rounded">
+              SYNCING
+            </span>
+            {onClosePanel && (
+              <button
+                onClick={onClosePanel}
+                className="p-1 text-[#6B7280] hover:text-white rounded-md hover:bg-[#162033] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
           <div className="w-12 h-12 rounded-full bg-[#162033] border border-[#1e293b] flex items-center justify-center mb-3">
@@ -225,7 +235,17 @@ export default function RightPanel(): React.JSX.Element | null {
             <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">
               SELECTED FACILITY
             </span>
-            <CloseBtn />
+            <div className="flex items-center gap-1">
+              <CloseBtn />
+              {onClosePanel && (
+                <button
+                  onClick={onClosePanel}
+                  className="p-1 text-[#6B7280] hover:text-white rounded-md hover:bg-[#162033] transition-colors ml-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
           <div className="flex items-start gap-2.5">
             <Building2 className="w-4 h-4 text-[#2D7DD2] mt-0.5 shrink-0" />
@@ -310,7 +330,17 @@ export default function RightPanel(): React.JSX.Element | null {
           </span>
           <div className="flex items-center gap-2">
             <SeverityBadge severity={activeHotspot.severity} />
-            <CloseBtn />
+            <div className="flex items-center gap-1">
+              <CloseBtn />
+              {onClosePanel && (
+                <button
+                  onClick={onClosePanel}
+                  className="p-1 text-[#6B7280] hover:text-white rounded-md hover:bg-[#162033] transition-colors ml-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

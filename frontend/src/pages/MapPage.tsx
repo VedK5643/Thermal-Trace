@@ -17,6 +17,7 @@ export default function MapPage(): React.JSX.Element {
 
   const [isMobileLegendOpen, setIsMobileLegendOpen] = useState(false);
   const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(false);
+  const [isDesktopPanelClosed, setIsDesktopPanelClosed] = useState(false);
 
   useEffect(() => {
     fetchAndSetLatestDate();
@@ -27,6 +28,8 @@ export default function MapPage(): React.JSX.Element {
     if (selectedHotspotId || selectedFacilityId) {
       if (window.innerWidth < 1024) {
         setIsMobilePanelOpen(true);
+      } else {
+        setIsDesktopPanelClosed(false);
       }
     }
   }, [selectedHotspotId, selectedFacilityId]);
@@ -105,9 +108,11 @@ export default function MapPage(): React.JSX.Element {
         </div>
 
         {/* RIGHT COLUMN: Intelligence Panel (FULL HEIGHT ON DESKTOP) */}
-        <div className="hidden lg:block w-[320px] lg:w-[340px] shrink-0 h-full overflow-hidden border-l border-[#1e293b] bg-[#0D121F]">
-          <RightPanel />
-        </div>
+        {!isDesktopPanelClosed && (
+          <div className="hidden lg:block w-[320px] lg:w-[340px] shrink-0 h-full overflow-hidden border-l border-[#1e293b] bg-[#0D121F]">
+            <RightPanel onClosePanel={() => setIsDesktopPanelClosed(true)} />
+          </div>
+        )}
       </main>
 
       {/* MOBILE LEGEND DRAWER OVERLAY (< 768px) */}
