@@ -155,7 +155,7 @@ class FIRMSSyncManager:
         # 1. Cooldown / Interval check
         if not force and self.last_sync_success_at:
             age_hours = (now - self.last_sync_success_at).total_seconds() / 3600.0
-            if age_hours < settings.firms_sync_interval_hours:
+            if 0 <= age_hours < settings.firms_sync_interval_hours:
                 logger.info(
                     "FIRMS sync skipped: last successful sync was %.1fh ago (interval is %dh).",
                     age_hours,
