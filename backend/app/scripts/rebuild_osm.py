@@ -19,7 +19,7 @@ def derive_feature_type(tags):
     return "unknown"
 
 async def main():
-    json_path = "data/ml/osm_industrial_india_raw.json"
+    json_path = "osm_industrial_india_raw.json"
     logger.info(f"Loading {json_path}...")
     try:
         with open(json_path, "r") as f:

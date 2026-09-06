@@ -81,6 +81,14 @@ class FIRMSSyncManager:
                 else:
                     self.last_sync_success_at = now
 
+                # Try loading observations_ingested from Redis key "firms:observations_ingested"
+                saved_obs = await redis_manager.get_cache("firms:observations_ingested")
+                if saved_obs:
+                    try:
+                        self.observations_ingested = int(saved_obs)
+                    except Exception:
+                        pass
+
                 self.last_sync_status = "success"
         except Exception as e:
             logger.warning("Notice initializing FIRMS status from database: %s", e)
@@ -137,6 +145,7 @@ class FIRMSSyncManager:
                 latest_ts = latest_ts.replace(tzinfo=timezone.utc)
             self.latest_observation_at = latest_ts
         await redis_manager.set_cache("firms:last_sync_success_at", now.isoformat(), ttl_seconds=2592000)
+        await redis_manager.set_cache("firms:observations_ingested", str(inserted), ttl_seconds=2592000)
         await redis_manager.invalidate_cache_pattern("analytics:*")
 
     def record_sync_failure(self, error: str):
