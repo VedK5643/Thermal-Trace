@@ -159,7 +159,7 @@ class OpenRouterProvider(LLMProvider):
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or settings.openrouter_api_key
-        self.model = model or settings.llm_model or "google/gemini-2.5-flash"
+        self.model = model or settings.llm_model or "google/gemini-2.5-flash:free"
         self.base_url = "https://openrouter.ai/api/v1/chat/completions"
 
     async def chat(

@@ -140,7 +140,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 required={mode === 'signup'}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Yash Pandey"
+                placeholder="e.g. Vedagya Gupta"
                 className="w-full bg-[#080C14] border border-[#1E2D45] rounded-lg pl-9 pr-3 py-2 text-xs text-[#E8EDF5] placeholder-[#7A8FA8] focus:border-[#2D7DD2]/50 focus:outline-none"
               />
             </div>
