@@ -34,16 +34,12 @@ async def run_backfill():
         updated_count = 0
         for h in hotspots:
             # 10-Feature Inference
-            ml_out = ml_inference_service.predict_observation(
-                brightness=h.brightness,
-                bright_ti5=getattr(h, "bright_ti5", None),
-                frp=getattr(h, "frp", None),
-                confidence=h.confidence,
+            ml_out = await ml_inference_service.predict_observation(
+                db=session,
                 latitude=h.latitude,
                 longitude=h.longitude,
                 timestamp=h.timestamp,
-                facility_dist_km=getattr(h, "facility_dist_km", None),
-                persistence_count=getattr(h, "persistence_count", None),
+                frp=h.frp,
             )
 
             h.ml_type = ml_out.ml_type
