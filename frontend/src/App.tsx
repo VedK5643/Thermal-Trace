@@ -8,6 +8,8 @@ import FacilitiesPage from './pages/FacilitiesPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ReportsPage from './pages/ReportsPage';
 
+import { ChatAssistant } from './components/ChatAssistant';
+
 export default function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
@@ -19,6 +21,7 @@ export default function App(): React.JSX.Element {
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/reports" element={<ReportsPage />} />
         </Routes>
+        <ChatAssistant />
       </Router>
     </QueryClientProvider>
   );
