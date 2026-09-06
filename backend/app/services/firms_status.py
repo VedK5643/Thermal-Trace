@@ -197,15 +197,22 @@ class FIRMSSyncManager:
                         days=settings.firms_ingestion_days,
                     )
 
-                    # Update latest observation timestamp from DB
-                    stmt = select(func.max(Hotspot.timestamp))
-                    max_res = await db.execute(stmt)
-                    max_ts = max_res.scalar()
+                    if res.get("sources_succeeded", 0) == 0 and res.get("sources_attempted", 0) > 0:
+                        # All sources failed (e.g., rate limit, HTTP error, or broken module)
+                        errors = res.get("errors", [])
+                        error_msg = f"All FIRMS sources failed. First error: {errors[0].get('error') if errors else 'Unknown error'}"
+                        logger.error(error_msg)
+                        self.record_sync_failure(error=error_msg)
+                    else:
+                        # Update latest observation timestamp from DB
+                        stmt = select(func.max(Hotspot.timestamp))
+                        max_res = await db.execute(stmt)
+                        max_ts = max_res.scalar()
 
-                    await self.record_sync_success(
-                        inserted=res.get("total_inserted", 0),
-                        latest_ts=max_ts,
-                    )
+                        await self.record_sync_success(
+                            inserted=res.get("total_inserted", 0),
+                            latest_ts=max_ts,
+                        )
 
                     duration = (self.last_sync_completed_at - self.last_sync_started_at).total_seconds()
                     logger.info(
