@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { HotspotType } from '../types/hotspot';
-import type { FacilityType } from '../types/facility';
+import type { NormalizedFacilityType } from '../types/facility';
 import type { MapStyleId } from '../config/mapStyles';
 import { getTodayISTString } from '../utils/dateUtils';
 
@@ -11,7 +11,7 @@ interface MapStoreState {
 
   // Filters
   activeHotspotTypes: HotspotType[];
-  activeFacilityTypes: FacilityType[];
+  activeFacilityTypes: NormalizedFacilityType[];
   minimumConfidence: number;
 
   // Timeline
@@ -35,8 +35,8 @@ interface MapStoreState {
   fetchAndSetLatestDate: () => Promise<void>;
   setHotspotTypes: (types: HotspotType[]) => void;
   toggleHotspotType: (type: HotspotType) => void;
-  setFacilityTypes: (types: FacilityType[]) => void;
-  toggleFacilityType: (type: FacilityType) => void;
+  setFacilityTypes: (types: NormalizedFacilityType[]) => void;
+  toggleFacilityType: (type: NormalizedFacilityType) => void;
   setMinimumConfidence: (confidence: number) => void;
   setShowHeatmap: (show: boolean) => void;
   setShowFacilities: (show: boolean) => void;

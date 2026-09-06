@@ -7,9 +7,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict
 
 
-FacilityType = Literal[
-    "refinery", "power_plant", "steel_plant", "cement_plant", "lng_terminal"
-]
+FacilityType = str
 
 
 class FacilityResponse(BaseModel):

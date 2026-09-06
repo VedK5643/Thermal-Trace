@@ -1,5 +1,5 @@
 import type { Hotspot, HotspotType } from '../types/hotspot';
-import type { Facility, FacilityType } from '../types/facility';
+import type { Facility, NormalizedFacilityType } from '../types/facility';
 
 export interface GeoJSONFeature {
   type: 'Feature';
@@ -161,13 +161,7 @@ export function filterHotspots(
 /**
  * Filter facilities by facility type and India boundary.
  */
-export function filterFacilities(
-  facilities: Facility[],
-  activeTypes: FacilityType[],
-): Facility[] {
-  return facilities.filter(
-    (f) =>
-      activeTypes.includes(f.type) &&
-      isInsideIndia(f.latitude, f.longitude),
-  );
+export function filterFacilities(facilities: Facility[] | undefined, activeTypes: NormalizedFacilityType[]): Facility[] {
+  if (!facilities) return [];
+  return facilities.filter(f => activeTypes.includes(f.type) && isInsideIndia(f.latitude, f.longitude));
 }

@@ -5,8 +5,8 @@ import { useHotspotsQuery } from '../services/queries/useHotspotsQuery';
 import { useFacilitiesQuery } from '../services/queries/useFacilitiesQuery';
 import { HOTSPOT_LABELS, HOTSPOT_COLORS } from '../types/hotspot';
 import type { Severity, HotspotType } from '../types/hotspot';
-import { FACILITY_LABELS } from '../types/facility';
-import type { FacilityType } from '../types/facility';
+// removed
+import { formatFacilityLabel } from '../types/facility';
 import type { Hotspot } from '../types/hotspot';
 import type { Facility } from '../types/facility';
 import { getDistance } from '../utils/geo';
@@ -267,8 +267,8 @@ export default function RightPanel({ onClosePanel }: { onClosePanel?: () => void
           <div className="grid grid-cols-2 gap-2.5">
             <div className="bg-[#162032] p-3 rounded-lg border border-[#1e293b]">
               <span className="text-[9px] font-bold text-[#6B7280] uppercase tracking-wider block mb-1">TYPE</span>
-              <span className="text-xs font-semibold text-[#E8EDF5]">
-                {FACILITY_LABELS[selectedFacility.type as FacilityType] || 'Industrial'}
+              <span className="text-[#94A3B8] capitalize truncate">
+                {formatFacilityLabel(selectedFacility.type) || 'Industrial'}
               </span>
             </div>
             <div className="bg-[#162032] p-3 rounded-lg border border-[#1e293b]">

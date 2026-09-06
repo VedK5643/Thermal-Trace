@@ -6,8 +6,8 @@ import { useActivityQuery } from '../services/queries/useActivityQuery';
 import { getTodayISTString, formatISTDateLabel } from '../utils/dateUtils';
 import type { HotspotType } from '../types/hotspot';
 import { HOTSPOT_COLORS, HOTSPOT_LABELS } from '../types/hotspot';
-import type { FacilityType } from '../types/facility';
-import { FACILITY_LABELS } from '../types/facility';
+import { getFacilityIcon, formatFacilityLabel } from '../types/facility';
+import { useFacilitiesQuery } from '../services/queries/useFacilitiesQuery';
 
 interface HotspotTypeItem {
   type: HotspotType;
@@ -16,7 +16,7 @@ interface HotspotTypeItem {
 }
 
 interface FacilityTypeItem {
-  type: FacilityType;
+  type: string;
   label: string;
   icon: string;
 }
@@ -32,6 +32,7 @@ export default function Legend(): React.JSX.Element {
   const resetFilters = useMapStore((s) => s.resetFilters);
 
   const { data: hotspots } = useHotspotsQuery(selectedDate, minimumConfidence);
+  const { data: facilities } = useFacilitiesQuery();
 
   const todayIST = getTodayISTString();
   const { data: activityData } = useActivityQuery(todayIST, minimumConfidence);
@@ -67,13 +68,15 @@ export default function Legend(): React.JSX.Element {
     { type: 'unknown', label: HOTSPOT_LABELS.unknown, color: HOTSPOT_COLORS.unknown },
   ];
 
-  const facilityTypes: FacilityTypeItem[] = [
-    { type: 'refinery', label: FACILITY_LABELS.refinery, icon: '⚗️' },
-    { type: 'power_plant', label: FACILITY_LABELS.power_plant, icon: '⚡' },
-    { type: 'steel_plant', label: FACILITY_LABELS.steel_plant, icon: '🏭' },
-    { type: 'cement_plant', label: FACILITY_LABELS.cement_plant, icon: '🏗️' },
-    { type: 'lng_terminal', label: FACILITY_LABELS.lng_terminal, icon: '💧' },
-  ];
+  const facilityTypes: FacilityTypeItem[] = useMemo(() => {
+    if (!facilities) return [];
+    const uniqueTypes = Array.from(new Set(facilities.map(f => f.type))).sort();
+    return uniqueTypes.map(type => ({
+      type,
+      label: formatFacilityLabel(type),
+      icon: getFacilityIcon(type)
+    }));
+  }, [facilities]);
 
   return (
     <aside className="w-full h-full flex flex-col bg-[#0D121F] overflow-hidden select-none border-r border-[#1e293b]">
