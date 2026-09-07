@@ -42,3 +42,7 @@ class FacilityService:
             city=city,
             country=country,
         )
+
+    async def get_summary(self) -> dict[str, int]:
+        """Get total counts grouped by feature_type."""
+        return await self.repo.get_summary()

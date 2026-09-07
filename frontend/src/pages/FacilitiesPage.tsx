@@ -45,23 +45,16 @@ export default function FacilitiesPage(): React.JSX.Element {
 
   useEffect(() => {
     fetchFacilities();
+    fetchSummary();
   }, [currentPage, selectedType, selectedState]);
 
-  // Calculate summary counts from the local facilities array
-  const calculateSummaryCounts = (items: FacilityItem[]) => {
-    const counts: Record<string, number> = {
-      'industrial': 0,
-      'quarry': 0,
-      'chimney': 0,
-      'power plant': 0,
-      'works': 0
-    };
-    items.forEach(f => {
-      if (counts[f.type] !== undefined) {
-        counts[f.type]++;
-      }
-    });
-    setSummaryCounts(counts);
+  const fetchSummary = async () => {
+    try {
+      const res = await api.get('/api/v1/facilities/summary');
+      setSummaryCounts(res.data.typeDistribution || {});
+    } catch (err) {
+      console.error('Failed to load facility summary:', err);
+    }
   };
 
   const fetchFacilities = async () => {
@@ -90,7 +83,6 @@ export default function FacilitiesPage(): React.JSX.Element {
       
       setFacilities(rawData);
       setTotalCount(total);
-      calculateSummaryCounts(rawData);
     } catch (err: any) {
       setError('Failed to load facilities. Please verify backend connection.');
     } finally {

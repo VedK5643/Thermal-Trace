@@ -82,3 +82,12 @@ class FacilityRepository:
 
         return items, total
 
+    async def get_summary(self) -> dict[str, int]:
+        """Get total counts grouped by feature_type."""
+        query = (
+            select(OSMFeature.feature_type, func.count(OSMFeature.id))
+            .where(OSMFeature.feature_type.in_(ALLOWED_FEATURE_TYPES))
+            .group_by(OSMFeature.feature_type)
+        )
+        result = await self.db.execute(query)
+        return {row[0]: row[1] for row in result.all()}

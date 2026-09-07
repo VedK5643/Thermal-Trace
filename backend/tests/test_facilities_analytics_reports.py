@@ -15,22 +15,21 @@ from app.api.v1.facilities import get_facilities_summary
 async def test_facilities_summary_endpoint():
     """Verify /facilities/summary aggregates facility type distribution counts."""
     mock_db = AsyncMock()
-    executor_mock = MagicMock()
 
-    f1 = MagicMock(type="Refinery")
-    f2 = MagicMock(type="Power Plant")
-    f3 = MagicMock(type="Refinery")
-
-    # Mock FacilityService.list
+    # Mock the SQL GROUP BY result which returns tuples of (feature_type, count)
     mock_res = MagicMock()
-    mock_res.scalars.return_value.all.return_value = [f1, f2, f3]
+    mock_res.all.return_value = [
+        ("landuse_industrial", 2),
+        ("power_plant", 1)
+    ]
     mock_db.execute.return_value = mock_res
 
     res = await get_facilities_summary(db=mock_db)
     assert "totalFacilities" in res
     assert "typeDistribution" in res
-    assert res["typeDistribution"].get("Refinery") == 2
-    assert res["typeDistribution"].get("Power Plant") == 1
+    assert res["totalFacilities"] == 3
+    assert res["typeDistribution"].get("industrial") == 2
+    assert res["typeDistribution"].get("power plant") == 1
 
 
 @pytest.mark.anyio

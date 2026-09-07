@@ -72,11 +72,15 @@ async def get_facilities_summary(
 ):
     """Get facility type distribution summary counts."""
     service = FacilityService(db)
-    items, total = await service.list(page=1, page_size=500)
+    raw_counts = await service.get_summary()
+    
+    total = sum(raw_counts.values())
     type_counts = {}
-    for f in items:
-        canonical_type = FORWARD_TYPE_MAPPING.get(f.feature_type, f.feature_type)
-        type_counts[canonical_type] = type_counts.get(canonical_type, 0) + 1
+    
+    for raw_type, count in raw_counts.items():
+        canonical_type = FORWARD_TYPE_MAPPING.get(raw_type, raw_type)
+        type_counts[canonical_type] = type_counts.get(canonical_type, 0) + count
+        
     return {
         "totalFacilities": total,
         "typeDistribution": type_counts
