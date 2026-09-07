@@ -69,8 +69,20 @@ export default function FacilitiesPage(): React.JSX.Element {
       if (selectedState !== 'all') params.state = selectedState;
 
       const res = await api.get('/api/v1/facilities', { params });
-      setFacilities(res.data.data || []);
-      setTotalCount(res.data.pagination?.total || 0);
+      
+      let rawData: any[] = [];
+      let total = 0;
+      
+      if (Array.isArray(res.data)) {
+        rawData = res.data;
+        total = rawData.length;
+      } else if (res.data) {
+        rawData = res.data.data || res.data.items || [];
+        total = res.data.pagination?.total || res.data.total || rawData.length;
+      }
+      
+      setFacilities(rawData);
+      setTotalCount(total);
     } catch (err: any) {
       setError('Failed to load facilities. Please verify backend connection.');
     } finally {

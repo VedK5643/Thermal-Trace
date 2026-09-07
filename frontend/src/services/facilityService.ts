@@ -11,8 +11,18 @@ export async function fetchFacilities(): Promise<Facility[]> {
     params: { page_size: 500 },
   });
   
+  // Handle various potential backend response shapes
+  let rawData: any[] = [];
+  if (Array.isArray(response.data)) {
+    rawData = response.data;
+  } else if (response.data && Array.isArray(response.data.data)) {
+    rawData = response.data.data;
+  } else if (response.data && Array.isArray(response.data.items)) {
+    rawData = response.data.items;
+  }
+  
   // Normalize types from the backend so that frontend filters have a stable target
-  return response.data.data.map((f: any) => ({
+  return rawData.map((f: any) => ({
     ...f,
     rawType: f.type,
     type: normalizeFacilityType(f.type)
