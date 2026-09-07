@@ -1,42 +1,21 @@
 // Raw type returned from backend
-export type RawFacilityType = string;
-
-// Normalized type used for filtering and display
-export type NormalizedFacilityType = string;
+export type FacilityType = string;
+export type NormalizedFacilityType = 'industrial' | 'quarry' | 'chimney' | 'power plant' | 'works' | string;
 
 export interface Facility {
   id: string;
-  name: string;
+  name?: string;
   type: NormalizedFacilityType;
-  rawType: RawFacilityType; // Preserve the raw type
+  rawType?: string;
   latitude: number;
   longitude: number;
-  city: string;
-  state: string;
-  country: string;
+  city?: string;
+  state?: string;
+  country?: string;
   source?: string;
-}
-
-/**
- * Normalizes raw OSM backend categories into a stable set of frontend display types.
- * Known raw categories from OSM data: "industrial", "quarry", "chimney", "power plant", "works", etc.
- */
-export function normalizeFacilityType(rawType: string): NormalizedFacilityType {
-  if (!rawType) return 'unknown';
-  
-  const lower = rawType.toLowerCase().trim();
-  
-  if (lower.includes('power')) return 'power plant';
-  if (lower.includes('quarry')) return 'quarry';
-  if (lower.includes('chimney')) return 'chimney';
-  if (lower.includes('works')) return 'works';
-  if (lower.includes('refinery')) return 'refinery';
-  if (lower.includes('steel')) return 'steel plant';
-  if (lower.includes('cement')) return 'cement plant';
-  if (lower.includes('lng')) return 'lng terminal';
-  if (lower.includes('industrial')) return 'industrial';
-  
-  return lower; // fallback for unmapped types
+  osm_type?: string;
+  osm_id?: number;
+  raw_tags?: Record<string, any>;
 }
 
 export function getFacilityIcon(type: NormalizedFacilityType): string {

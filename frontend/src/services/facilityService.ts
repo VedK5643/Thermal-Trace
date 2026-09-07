@@ -1,5 +1,4 @@
 import type { Facility } from '../types/facility';
-import { normalizeFacilityType } from '../types/facility';
 import api from './api';
 
 /**
@@ -21,11 +20,7 @@ export async function fetchFacilities(): Promise<Facility[]> {
     rawData = response.data.items;
   }
   
-  // Normalize types from the backend so that frontend filters have a stable target
-  return rawData.map((f: any) => ({
-    ...f,
-    rawType: f.type,
-    type: normalizeFacilityType(f.type)
-  })) as Facility[];
+  // The backend now guarantees canonical 'type' and preserves 'rawType'
+  return rawData as Facility[];
 }
 

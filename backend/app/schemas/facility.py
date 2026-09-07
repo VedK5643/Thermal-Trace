@@ -16,11 +16,15 @@ class FacilityResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
-    name: str
+    name: Optional[str] = "Unknown Facility"
     type: FacilityType
+    rawType: Optional[str] = None
     latitude: float
     longitude: float
-    city: str
-    state: str
-    country: str
-    source: Optional[str] = "unknown"
+    city: Optional[str] = "Unknown"
+    state: Optional[str] = "Unknown"
+    country: Optional[str] = "India"
+    source: Optional[str] = "osm"
+    osm_type: Optional[str] = None
+    osm_id: Optional[int] = None
+    raw_tags: Optional[dict] = None

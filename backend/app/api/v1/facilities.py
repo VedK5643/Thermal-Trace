@@ -13,6 +13,32 @@ from app.services.facility import FacilityService
 
 router = APIRouter()
 
+FORWARD_TYPE_MAPPING = {
+    "landuse_industrial": "industrial",
+    "landuse_quarry": "quarry",
+    "man_made_chimney": "chimney",
+    "power_plant": "power plant",
+    "man_made_works": "works"
+}
+
+def map_osm_feature_to_response(f) -> FacilityResponse:
+    canonical_type = FORWARD_TYPE_MAPPING.get(f.feature_type, f.feature_type)
+    return FacilityResponse(
+        id=f.id,
+        name=f.name or "Unknown Facility",
+        type=canonical_type,
+        rawType=f.feature_type,
+        latitude=f.latitude,
+        longitude=f.longitude,
+        city="Unknown",
+        state="Unknown",
+        country="India",
+        source="osm",
+        osm_type=f.osm_type,
+        osm_id=f.osm_id,
+        raw_tags=f.raw_tags
+    )
+
 
 @router.get("/facilities", response_model=PaginatedResponse[FacilityResponse])
 async def list_facilities(
@@ -35,7 +61,7 @@ async def list_facilities(
         country=country,
     )
     return PaginatedResponse(
-        data=[FacilityResponse.model_validate(f) for f in items],
+        data=[map_osm_feature_to_response(f) for f in items],
         pagination=PaginationMeta(page=page, page_size=page_size, total=total),
     )
 
@@ -49,8 +75,8 @@ async def get_facilities_summary(
     items, total = await service.list(page=1, page_size=500)
     type_counts = {}
     for f in items:
-        ftype = f.type or "Industrial Facility"
-        type_counts[ftype] = type_counts.get(ftype, 0) + 1
+        canonical_type = FORWARD_TYPE_MAPPING.get(f.feature_type, f.feature_type)
+        type_counts[canonical_type] = type_counts.get(canonical_type, 0) + 1
     return {
         "totalFacilities": total,
         "typeDistribution": type_counts
@@ -65,4 +91,8 @@ async def get_facility(
     """Get a single facility by ID."""
     service = FacilityService(db)
     facility = await service.get_by_id(facility_id)
-    return FacilityResponse.model_validate(facility)
+    if not facility:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Facility not found")
+    return map_osm_feature_to_response(facility)
+
