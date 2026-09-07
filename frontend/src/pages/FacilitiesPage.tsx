@@ -45,16 +45,23 @@ export default function FacilitiesPage(): React.JSX.Element {
 
   useEffect(() => {
     fetchFacilities();
-    fetchSummary();
   }, [currentPage, selectedType, selectedState]);
 
-  const fetchSummary = async () => {
-    try {
-      const res = await api.get('/api/v1/facilities/summary');
-      setSummaryCounts(res.data.typeDistribution || {});
-    } catch (err) {
-      console.error('Failed to load facility summary:', err);
-    }
+  // Calculate summary counts from the local facilities array
+  const calculateSummaryCounts = (items: FacilityItem[]) => {
+    const counts: Record<string, number> = {
+      'industrial': 0,
+      'quarry': 0,
+      'chimney': 0,
+      'power plant': 0,
+      'works': 0
+    };
+    items.forEach(f => {
+      if (counts[f.type] !== undefined) {
+        counts[f.type]++;
+      }
+    });
+    setSummaryCounts(counts);
   };
 
   const fetchFacilities = async () => {
@@ -83,6 +90,7 @@ export default function FacilitiesPage(): React.JSX.Element {
       
       setFacilities(rawData);
       setTotalCount(total);
+      calculateSummaryCounts(rawData);
     } catch (err: any) {
       setError('Failed to load facilities. Please verify backend connection.');
     } finally {
@@ -146,24 +154,24 @@ export default function FacilitiesPage(): React.JSX.Element {
             <span className="text-lg sm:text-xl font-extrabold text-[#E8EDF5] mt-0.5 sm:mt-1 block">{totalCount}</span>
           </div>
           <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Refineries</span>
-            <span className="text-lg sm:text-xl font-extrabold text-[#2D7DD2] mt-0.5 sm:mt-1 block">{summaryCounts['Refinery'] || summaryCounts['refinery'] || 0}</span>
+            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Industrial</span>
+            <span className="text-lg sm:text-xl font-extrabold text-[#2D7DD2] mt-0.5 sm:mt-1 block">{summaryCounts['industrial'] || 0}</span>
+          </div>
+          <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
+            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Quarries</span>
+            <span className="text-lg sm:text-xl font-extrabold text-amber-400 mt-0.5 sm:mt-1 block">{summaryCounts['quarry'] || 0}</span>
+          </div>
+          <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
+            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Chimneys</span>
+            <span className="text-lg sm:text-xl font-extrabold text-emerald-400 mt-0.5 sm:mt-1 block">{summaryCounts['chimney'] || 0}</span>
           </div>
           <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
             <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Power Plants</span>
-            <span className="text-lg sm:text-xl font-extrabold text-amber-400 mt-0.5 sm:mt-1 block">{summaryCounts['Power Plant'] || summaryCounts['power_plant'] || 0}</span>
+            <span className="text-lg sm:text-xl font-extrabold text-orange-400 mt-0.5 sm:mt-1 block">{summaryCounts['power plant'] || 0}</span>
           </div>
           <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Steel Plants</span>
-            <span className="text-lg sm:text-xl font-extrabold text-orange-400 mt-0.5 sm:mt-1 block">{summaryCounts['Steel Plant'] || 0}</span>
-          </div>
-          <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Cement Plants</span>
-            <span className="text-lg sm:text-xl font-extrabold text-emerald-400 mt-0.5 sm:mt-1 block">{summaryCounts['Cement Plant'] || 0}</span>
-          </div>
-          <div className="bg-[#111827] border border-[#1E2D45] p-3 sm:p-3.5 rounded-xl shadow-lg">
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">LNG Terminals</span>
-            <span className="text-lg sm:text-xl font-extrabold text-cyan-400 mt-0.5 sm:mt-1 block">{summaryCounts['LNG Terminal'] || summaryCounts['lng_terminal'] || 0}</span>
+            <span className="text-[9px] sm:text-[10px] font-bold text-[#7A8FA8] uppercase tracking-wider block">Works</span>
+            <span className="text-lg sm:text-xl font-extrabold text-cyan-400 mt-0.5 sm:mt-1 block">{summaryCounts['works'] || 0}</span>
           </div>
         </div>
 

@@ -443,8 +443,12 @@ export default function RightPanel({ onClosePanel }: { onClosePanel?: () => void
               <div className="grid grid-cols-3 gap-2">
                 <div className="bg-[#162032] p-2.5 rounded-lg border border-[#1e293b]">
                   <span className="text-[9px] font-bold text-[#6B7280] uppercase block">FRP</span>
-                  <span className="text-xs font-bold text-[#FF6B00] block mt-0.5">N/A</span>
-                  <span className="text-[8px] text-[#F97316] block mt-0.5">Not tracked</span>
+                  <span className="text-xs font-bold text-[#FF6B00] block mt-0.5">
+                    {activeHotspot.frp != null ? `${activeHotspot.frp} MW` : 'N/A'}
+                  </span>
+                  <span className="text-[8px] text-[#F97316] block mt-0.5">
+                    {activeHotspot.frp != null ? 'Tracked' : 'Not tracked'}
+                  </span>
                 </div>
                 <div className="bg-[#162032] p-2.5 rounded-lg border border-[#1e293b]">
                   <span className="text-[9px] font-bold text-[#6B7280] uppercase block">BRIGHTNESS</span>

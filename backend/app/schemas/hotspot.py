@@ -31,6 +31,7 @@ class HotspotResponse(BaseModel):
     timestamp: datetime
     facility_id: Optional[str] = Field(None, alias="facilityId", serialization_alias="facilityId")
     status: HotspotStatus
+    frp: Optional[float] = None
 
     # Phase 6 ML Prediction fields
     ml_type: Optional[HotspotType] = Field(None, alias="mlType", serialization_alias="mlType")

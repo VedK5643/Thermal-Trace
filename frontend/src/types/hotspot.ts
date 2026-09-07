@@ -8,8 +8,6 @@ export type Severity = 'low' | 'medium' | 'high' | 'critical';
 
 export type HotspotStatus = 'active' | 'resolved' | 'monitoring';
 
-
-
 export interface Hotspot {
   id: string;
   latitude: number;
@@ -21,6 +19,7 @@ export interface Hotspot {
   timestamp: string;
   facilityId: string | null;
   status: HotspotStatus;
+  frp?: number;
   // Phase 6 ML Prediction fields
   mlType?: HotspotType;
   mlConfidence?: number;
